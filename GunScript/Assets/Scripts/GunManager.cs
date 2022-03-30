@@ -2,14 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class GunManager : MonoBehaviour
 {
     public Camera fpsCam;
     public Transform attackPoint;
+    public Transform weaponPos;
+    public Transform adsPos;
     public RaycastHit rayHit;
     public LayerMask whatIsEnemy;
     public int damage;
+    public float aimAnimSpeed = 1f;
     public float timeBetweenShooting, spread, range, reloadTime, timeBetweenShots;
     public int magazineSize, bulletPerTap;
     public bool allowButtonHold;
@@ -26,14 +30,25 @@ public class GunManager : MonoBehaviour
         bulletsLeft = magazineSize;
         readyToShoot = true;
     }
-    private void Update()
+    private void OnEnable()
     {
+        fpsCam = Camera.main;
+        cameraShake = fpsCam.gameObject.GetComponent<CameraShake>();
+        GameObject.Find("TextMag");
+        text = GameObject.Find("TextMag").GetComponent<TextMeshProUGUI>();
+    }
+    private void Update()
+    {   
         MyInput();
-
-        text.SetText(bulletsLeft + " / " + magazineSize);
+        text.text = bulletsLeft + " / " + magazineSize;
     }
     public void MyInput()
     {
+        /*if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            weaponPos.position = Vector3.Lerp(weaponPos, adsPos.localPosition, aimAnimSpeed * Time.deltaTime);
+        }*/
+
         if (allowButtonHold)
         {
             shooting = Input.GetKey(KeyCode.Mouse0);
@@ -86,7 +101,10 @@ public class GunManager : MonoBehaviour
 
         bulletsLeft--;
         bulletsShot--;
-        Invoke("ResetShot", timeBetweenShots);
+        if (!IsInvoking("ResetShot") && !readyToShoot)
+        {
+            Invoke("ResetShot", timeBetweenShots);
+        }
 
         if (bulletsShot > 0 && bulletsLeft > 0)
         {
