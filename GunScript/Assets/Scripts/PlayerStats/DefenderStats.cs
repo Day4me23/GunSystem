@@ -1,15 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class ShootingEnemy : MonoBehaviour
+public class DefenderStats : MonoBehaviour
 {
     public int maxHealth = 100;
-    public Text playerScore;
-    public Text timer;
-    int counter;
-    public GameObject playerPrefab;
     public int currentHealth { get; private set; }
 
 
@@ -25,17 +20,6 @@ public class ShootingEnemy : MonoBehaviour
         if (currentHealth <= 0)
         {
             Debug.Log("enemy dead");
-            EnemyKill();
         }
-    }
-    public void EnemyKill()
-    {
-        Destroy(gameObject);
-        playerScore.text = counter++.ToString();
-        Respawn();
-    }
-    public void Respawn()
-    {
-        Instantiate(playerPrefab, new Vector3(Random.Range(-5, 5), 2.5f, Random.Range(-10, 5)), Quaternion.identity);
     }
 }
