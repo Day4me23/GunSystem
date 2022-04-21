@@ -28,7 +28,7 @@ public class ShootingEnemy : MonoBehaviour
             EnemyKill();
         }
     }
-    public void EnemyKill()
+    public virtual void EnemyKill()
     {
         Destroy(gameObject);
         playerScore.text = counter++.ToString();
