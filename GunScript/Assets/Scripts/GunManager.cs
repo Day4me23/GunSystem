@@ -39,6 +39,8 @@ public class GunManager : MonoBehaviour
     }
     private void Update()
     {   
+        if (GameManager.instance.phase == Phase.buy)
+            return;
         MyInput();
         text.text = bulletsLeft + " / " + magazineSize;
     }
@@ -97,7 +99,7 @@ public class GunManager : MonoBehaviour
 
         //Graphics
         Instantiate(bulletHoleGraphic, rayHit.point, Quaternion.Euler(0,180, 0));
-        Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+        Destroy(Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity), .05f);
 
         bulletsLeft--;
         bulletsShot--;

@@ -15,6 +15,8 @@ public class Player : ShootingEnemy
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
+        GameManager.instance.team1.Add(this);
+        GameManager.instance.NewRound();
     }
 
 

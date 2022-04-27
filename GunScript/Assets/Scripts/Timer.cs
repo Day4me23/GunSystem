@@ -7,9 +7,11 @@ public class Timer : MonoBehaviour
 {
     public float timeValue = 90;
     public Text timeText;
+    public float timeToDisplay;
 
-    public void DisplayTime(float timeToDisplay)
+    private void Update()
     {
+        timeToDisplay = GameManager.instance.timer;
         if (timeToDisplay < 0)
         {
             timeToDisplay = 0;

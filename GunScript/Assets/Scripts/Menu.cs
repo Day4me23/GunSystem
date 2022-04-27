@@ -1,25 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
     public GameObject menuUI;
     public static bool openShop = false;
+    public Text text;
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (GameManager.instance.phase == Phase.buy)
         {
-            if (openShop)
-            {
-                CloseWeaponShop();
-            }
-            else
-            {
-                OpenWeaponShop();
-            }
-            
-        }   
+            text.text = "Press B to open the buy menu.";
+            if (Input.GetKeyDown(KeyCode.B))
+                if (openShop)
+                    CloseWeaponShop();
+                else
+                    OpenWeaponShop();
+        }
+        else
+        {
+            text.text = "";
+            CloseWeaponShop();
+        }
+          
     }
 
     void CloseWeaponShop()

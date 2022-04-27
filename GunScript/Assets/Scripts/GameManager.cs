@@ -12,11 +12,16 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         instance = this;
         DontDestroyOnLoad(gameObject);
+        team2.Add(Instantiate(dummy, spawn2).GetComponent<Player>());
+        team1.Add(Instantiate(player, spawn1).GetComponent<Player>());
     }
     #endregion
     public List<Player> team1 = new List<Player>();
     public List<Player> team2 = new List<Player>();
     const int roundTotal = 10;
+    public Transform spawn1;
+    public Transform spawn2;
+    public Transform deadZone;
     [HideInInspector]
     public float timer;
     public int currentRound = 0;
@@ -24,8 +29,9 @@ public class GameManager : MonoBehaviour
     Team currentAttacker = Team.team1;
     int team1Score = 0;
     int team2Score = 0;
-    Phase phase;
-
+    public Phase phase;
+    public GameObject dummy;
+    public GameObject player;
 
     void Update()
     {
@@ -44,8 +50,9 @@ public class GameManager : MonoBehaviour
             if (currentAttacker == Team.team2)
                 EndRound(Team.team1);
         }
-        else if (phase == Phase.bomb)
+        else if (phase == Phase.bomb && timer <= 0)
             EndRound(currentAttacker);
+        
     }
 
     public void OnPlayerDeath()
@@ -73,12 +80,15 @@ public class GameManager : MonoBehaviour
     public void NewRound()
     {
         phase = Phase.buy;
+        timer = 15;
         bomb = Bomb.notPlanted;
         currentRound++;
         for (int i = 0; i < team1.Count; i++)
         {
             team1[i].alive = true;
             team2[i].alive = true;
+            team1[i].transform.position = spawn1.position;
+            team2[i].transform.position = spawn2.position;
         }
 
 
