@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class GameManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
         team2.Add(Instantiate(dummy, spawn2).GetComponent<Player>());
-        team1.Add(Instantiate(player, spawn1).GetComponent<Player>());
+        GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, randomPosition, Quaternion.identity);
+        team1.Add(PhotonNetwork.Instantiate(player.name, spawn1, Quaternion.identity).GetComponent<Player>());
     }
     #endregion
     public List<Player> team1 = new List<Player>();
@@ -86,9 +88,9 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < team1.Count; i++)
         {
             team1[i].alive = true;
-            team2[i].alive = true;
+            //team2[i].alive = true;
             team1[i].transform.position = spawn1.position;
-            team2[i].transform.position = spawn2.position;
+            //team2[i].transform.position = spawn2.position;
         }
 
 

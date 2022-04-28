@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Enemy
   - Trigger
+  - Bullet
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
   - Enemy
