@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class Plant : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class Plant : MonoBehaviour
             timer = 0;
         if (timer >= time)
         {
-            Instantiate(moBamba, transform.position, Quaternion.identity);
+            PhotonNetwork.Instantiate(moBamba.name, transform.position, Quaternion.identity);
             Destroy(this);
         }
     }
