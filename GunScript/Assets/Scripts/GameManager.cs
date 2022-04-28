@@ -14,7 +14,10 @@ public class GameManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
         //team2.Add(Instantiate(dummy, spawn2).GetComponent<Player>());
-        team1.Add(PhotonNetwork.Instantiate(player.name, new Vector3(18, -10, 25), Quaternion.identity).GetComponent<Player>());
+        if (Player.localPlayerInstance == null)
+        {
+            team1.Add(PhotonNetwork.Instantiate(player.name, new Vector3(18, -10, 25), Quaternion.identity).GetComponent<Player>());
+        }
         //team2.Add(PhotonNetwork.Instantiate(dummy.name, new Vector3(18, -12, -22), Quaternion.identity).GetComponent<Player>());
     }
     #endregion
