@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks
 {
     #region
     public static GameManager instance;
+
     private void Awake()
     {
         if (instance != null)
@@ -16,7 +17,16 @@ public class GameManager : MonoBehaviour
         //team2.Add(Instantiate(dummy, spawn2).GetComponent<Player>());
         if (Player.localPlayerInstance == null)
         {
-            team1.Add(PhotonNetwork.Instantiate(player.name, new Vector3(18, 5, 25), Quaternion.identity).GetComponent<Player>());
+            if (PhotonNetwork.IsMasterClient == true)
+            {
+                Debug.Log("Host join team 1.");
+                team1.Add(PhotonNetwork.Instantiate(player.name, new Vector3(18, 5, 25), Quaternion.identity).GetComponent<Player>());
+            }
+            else
+            {
+                Debug.Log("New player joined team 2.");
+                team2.Add(PhotonNetwork.Instantiate(player.name, new Vector3(18, 5, -24), Quaternion.identity).GetComponent<Player>());
+            }
         }
         //team2.Add(PhotonNetwork.Instantiate(dummy.name, new Vector3(18, -12, -22), Quaternion.identity).GetComponent<Player>());
     }
