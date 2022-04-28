@@ -373,6 +373,7 @@ MonoBehaviour:
   playerScore: {fileID: 0}
   timer: {fileID: 0}
   playerPrefab: {fileID: 1188434533315546862}
+  photonView: {fileID: 0}
   alive: 0
   currency: 0
 --- !u!114 &-3387199888010524286
