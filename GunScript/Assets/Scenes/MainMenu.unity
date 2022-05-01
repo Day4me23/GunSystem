@@ -207,7 +207,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2139732067}
-        m_TargetAssemblyTypeName: CreateAndJoinRooms, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuUI, Assembly-CSharp
         m_MethodName: JoinRoom
         m_Mode: 1
         m_Arguments:
@@ -1166,7 +1166,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2139732067}
-        m_TargetAssemblyTypeName: CreateAndJoinRooms, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuUI, Assembly-CSharp
         m_MethodName: CreateRoom
         m_Mode: 1
         m_Arguments:
@@ -2337,8 +2337,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2139732068}
   - component: {fileID: 2139732067}
+  - component: {fileID: 2139732069}
   m_Layer: 0
-  m_Name: CreateAndJoinRooms
+  m_Name: NetworkManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2353,7 +2354,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2139732066}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53acdccb5e1bc694bb2b33329f1e975c, type: 3}
+  m_Script: {fileID: 11500000, guid: ad11c625e99c75040b7b9e78b677b6cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   createInput: {fileID: 1220684791}
@@ -2372,3 +2373,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2139732069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2139732066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53acdccb5e1bc694bb2b33329f1e975c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
