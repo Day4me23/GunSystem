@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Photon.Pun;
 
 public class GameManager : MonoBehaviourPunCallbacks
@@ -10,14 +11,18 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
+        photonView = GetComponent<PhotonView>();
+        PhotonNetwork.AutomaticallySyncScene = true;
         if (instance != null)
             Destroy(gameObject);
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        timer = 15;
+        phase = Phase.buy;
+        
         //team2.Add(Instantiate(dummy, spawn2).GetComponent<Player>());
         if (Player.localPlayerInstance == null)
         {
-            if (PhotonNetwork.IsMasterClient == true)
+            if (PhotonNetwork.IsMasterClient)
             {
                 Debug.Log("Host join team 1.");
                 team1.Add(PhotonNetwork.Instantiate(player.name, new Vector3(18, 5, 25), Quaternion.identity).GetComponent<Player>());
@@ -28,6 +33,11 @@ public class GameManager : MonoBehaviourPunCallbacks
                 team2.Add(PhotonNetwork.Instantiate(player.name, new Vector3(18, 5, -24), Quaternion.identity).GetComponent<Player>());
             }
         }
+        for (int i = 0; i < team1.Count; i++)
+            team1[i].setTeam(Team.team1);
+        for (int i = 0; i < team2.Count; i++)
+            team2[i].setTeam(Team.team2);
+
         //team2.Add(PhotonNetwork.Instantiate(dummy.name, new Vector3(18, -12, -22), Quaternion.identity).GetComponent<Player>());
     }
     #endregion
@@ -35,21 +45,31 @@ public class GameManager : MonoBehaviourPunCallbacks
     public List<Player> team2 = new List<Player>();
     const int roundTotal = 10;
     public Transform spawn1;
+    [SerializeField]
+    PhotonView photonView;
     public Transform spawn2;
     public Transform deadZone;
     [HideInInspector]
     public float timer;
     public int currentRound = 0;
     public Bomb bomb;
-    Team currentAttacker = Team.team1;
-    int team1Score = 0;
-    int team2Score = 0;
+    public Team currentAttacker = Team.team1;
     public Phase phase;
     public GameObject dummy;
     public GameObject player;
 
     void Update()
     {
+        if (phase == Phase.buy)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
         if (timer > 0)
             timer -= Time.deltaTime;
         else if (phase == Phase.buy)
@@ -61,12 +81,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             timer = 0;
             if (currentAttacker == Team.team1)
-                EndRound(Team.team2);
+                photonView.RPC("EndRound", RpcTarget.AllBuffered, team2);
             if (currentAttacker == Team.team2)
-                EndRound(Team.team1);
+                photonView.RPC("EndRound", RpcTarget.AllBuffered, team1);
         }
         else if (phase == Phase.bomb && timer <= 0)
-            EndRound(currentAttacker);
+            photonView.RPC("EndRound", RpcTarget.AllBuffered, currentAttacker);
         
     }
 
@@ -84,11 +104,11 @@ public class GameManager : MonoBehaviourPunCallbacks
                 team2Alive = true;
         if (!team1Alive && bomb == Bomb.notPlanted)
         {
-            EndRound(Team.team2);
+            photonView.RPC("EndRound", RpcTarget.AllBuffered, team2);
         }
         else if (!team2Alive && bomb == Bomb.notPlanted)
         {
-            EndRound(Team.team1);
+            photonView.RPC("EndRound", RpcTarget.AllBuffered, team1);
         }
     }
 
@@ -114,18 +134,27 @@ public class GameManager : MonoBehaviourPunCallbacks
  
     }
 
+    [PunRPC]
     public void EndRound(Team team)
     {
+        
         if (team == Team.team1)
-            team1Score++;
+            PointManager.instance.score1++;
         if (team == Team.team2)
-            team2Score++;
+            PointManager.instance.score2++;
+        if (PhotonNetwork.IsMasterClient)
+            PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
+    }
+
+    public void End(Team team)
+    {
+        photonView.RPC("EndRound", RpcTarget.AllBuffered, team);
     }
 
 }
 public enum Team
 {
-    team1, team2
+    none, team1, team2
 }
 public enum Bomb
 {

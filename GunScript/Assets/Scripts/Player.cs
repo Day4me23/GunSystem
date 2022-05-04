@@ -8,6 +8,7 @@ public class Player : ShootingEnemy
     public static GameObject localPlayerInstance;
     public PhotonView photonView;
     public bool alive;
+    private Team team;
     public int currency;
     private void Awake()
     {
@@ -27,6 +28,14 @@ public class Player : ShootingEnemy
         GameManager.instance.team1.Add(this);
         GameManager.instance.NewRound();
     }
+    public Team getTeam()
+    {
+        return team;
+    }
 
+    public void setTeam(Team team)
+    {
+        this.team = team;
+    }
 
 }

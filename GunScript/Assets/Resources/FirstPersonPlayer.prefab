@@ -388,7 +388,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 293654c71c0cdb1499a7d7fbaaaeb403, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isInArea: 0
+  isInPlantZone: 0
+  isInDefuseZone: 0
   time: 3
   timer: 0
   moBamba: {fileID: 9067112722083675117, guid: 6f92a478bd4d6d94f99a9a2aec1f61a8, type: 3}
