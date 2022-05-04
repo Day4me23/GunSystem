@@ -17,4 +17,8 @@ public class MenuUI : MonoBehaviour
     {
         NetworkManager.instance.JoinRoom(joinInput.text);
     }
+    public void ButtonQuit()
+    {
+        Application.Quit();
+    }
 }
