@@ -30,7 +30,7 @@ public class Plant : MonoBehaviour
                 PhotonNetwork.Instantiate(moBamba.name, transform.position, Quaternion.identity);
                 Destroy(this);
             }
-            if (isInDefuseZone)
+            if (isInDefuseZone && GameManager.instance.phase == Phase.bomb)
             {
                 Debug.Log("Defused");
                 if (GameManager.instance.currentAttacker == Team.team1)

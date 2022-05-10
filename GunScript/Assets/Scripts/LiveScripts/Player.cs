@@ -6,16 +6,23 @@ using Photon.Pun;
 public class Player : ShootingEnemy
 {
     public static GameObject localPlayerInstance;
-    public PhotonView photonView;
+    private PhotonView photonView;
     public bool alive;
     private Team team;
     public int currency;
     private void Awake()
     {
-        if (photonView.IsMine)
+        //photonView = GetComponent<PhotonView>();
+        try
         {
-            Player.localPlayerInstance = this.gameObject;
+            if (photonView.IsMine)
+                Player.localPlayerInstance = this.gameObject;
         }
+        catch
+        {
+
+        }
+        
     }
     public override void EnemyKill()
     {

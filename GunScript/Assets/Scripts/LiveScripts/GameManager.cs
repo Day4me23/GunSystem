@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Photon.Pun;
 
 public class GameManager : MonoBehaviourPunCallbacks
@@ -44,6 +45,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public List<Player> team1 = new List<Player>();
     public List<Player> team2 = new List<Player>();
     const int roundTotal = 10;
+    public Text winText;
     public Transform spawn1;
     [SerializeField]
     PhotonView photonView;
@@ -57,9 +59,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     public Phase phase;
     public GameObject dummy;
     public GameObject player;
+    public GameObject gameOver;
+    public bool gameIsOver = false;
 
     void Update()
     {
+        if (gameIsOver)
+        {
+            return;
+        }
         if (phase == Phase.buy)
         {
             Cursor.lockState = CursorLockMode.None;
@@ -87,7 +95,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         else if (phase == Phase.bomb && timer <= 0)
             photonView.RPC("EndRound", RpcTarget.AllBuffered, currentAttacker);
-        
+        else
+            photonView.RPC("EndRound", RpcTarget.AllBuffered, Team.team2);
+
     }
 
     public void OnPlayerDeath()
@@ -137,18 +147,35 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void EndRound(Team team)
     {
-        
-        if (team == Team.team1)
+        GameOver(team);
+        /*if (team == Team.team1)
             PointManager.instance.score1++;
         if (team == Team.team2)
             PointManager.instance.score2++;
         if (PhotonNetwork.IsMasterClient)
-            PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
+            PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);*/
     }
 
     public void End(Team team)
     {
         photonView.RPC("EndRound", RpcTarget.AllBuffered, team);
+    }
+
+    public void GoToMainMenu()
+    {
+        PhotonNetwork.LeaveRoom();
+        SceneManager.LoadScene("MainMenu");
+    }
+    public void GameOver(Team team)
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        gameIsOver = true;
+        gameOver.SetActive(true);
+        if (team == Team.team1)
+            winText.text = "Attacker Wins...";
+        else
+            winText.text = "Defender Wins...";
     }
 
 }

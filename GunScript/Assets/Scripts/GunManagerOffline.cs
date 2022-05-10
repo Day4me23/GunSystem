@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class GunManager : MonoBehaviour
+public class GunManagerOffline : MonoBehaviour
 {
     public Camera fpsCam;
     public Transform attackPoint;
@@ -38,9 +38,7 @@ public class GunManager : MonoBehaviour
         text = GameObject.Find("TextMag").GetComponent<TextMeshProUGUI>();
     }
     private void Update()
-    {   
-        if (GameManager.instance.phase == Phase.buy)
-            return;
+    {
         MyInput();
         text.text = bulletsLeft + " / " + magazineSize;
     }
@@ -60,9 +58,9 @@ public class GunManager : MonoBehaviour
             shooting = Input.GetKeyDown(KeyCode.Mouse0);
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading) 
-        { 
-            Reload(); 
+        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading)
+        {
+            Reload();
         }
         if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
         {
@@ -71,7 +69,6 @@ public class GunManager : MonoBehaviour
         }
 
     }
-
     private void Shoot()
     {
         readyToShoot = false;
@@ -81,7 +78,7 @@ public class GunManager : MonoBehaviour
         float y = Random.Range(-spread, spread);
 
         //Calculate Direction while moving
-        Vector3 direction = fpsCam.transform.forward + new Vector3(x,y,0);
+        Vector3 direction = fpsCam.transform.forward + new Vector3(x, y, 0);
 
         //RayCast shot
         if (Physics.Raycast(fpsCam.transform.position, direction, out rayHit, range, whatIsEnemy))
@@ -98,7 +95,7 @@ public class GunManager : MonoBehaviour
         StartCoroutine(cameraShake.Shake(cameraShakeDuration, cameraShakeMagnitude));
 
         //Graphics
-        Instantiate(bulletHoleGraphic, rayHit.point, Quaternion.Euler(0,180, 0));
+        Instantiate(bulletHoleGraphic, rayHit.point, Quaternion.Euler(0, 180, 0));
         Destroy(Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity), .05f);
 
         bulletsLeft--;

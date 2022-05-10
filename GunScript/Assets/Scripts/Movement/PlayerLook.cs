@@ -32,7 +32,7 @@ public class PlayerLook : MonoBehaviourPunCallbacks
     }
     private void Update()
     {
-        if (photonView.IsMine)
+        if (photonView.IsMine && ( GameManager.instance == null || !(GameManager.instance.gameIsOver)))
         {
             float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
             float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;

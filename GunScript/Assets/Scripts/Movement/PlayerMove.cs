@@ -23,7 +23,7 @@ public class PlayerMove : MonoBehaviourPunCallbacks
     private void Update()
     {
         
-        if (photonView.IsMine)
+        if (photonView.IsMine && (GameManager.instance == null || !(GameManager.instance.gameIsOver)))
         {
             Debug.Log(photonView.ViewID);
             isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
